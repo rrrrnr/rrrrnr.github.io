@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Camera Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            width: 80%;
+            max-width: 640px;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-color: #000;
+            display: block; /* Ensure video takes up its own space */
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 10px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>实时摄像头显示</h1>
+    <video id="cameraFeed" autoplay playsinline></video>
+    <button id="startButton">启动摄像头</button>
+    <p id="message"></p>
+
+    <script>
+        const video = document.getElementById('cameraFeed');
+        const startButton = document.getElementById('startButton');
+        const message = document.getElementById('message');
+        let stream; // To hold the MediaStream object
+
+        startButton.addEventListener('click', async () => {
+            if (stream) {
+                // If camera is already running, stop it
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                startButton.textContent = '启动摄像头';
+                message.textContent = '';
+                return;
+            }
+
+            try {
+                // Request access to the user's camera
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                startButton.textContent = '关闭摄像头';
+                message.textContent = '摄像头已启动！';
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                if (err.name === 'NotAllowedError') {
+                    message.textContent = '需要您的权限才能访问摄像头。请允许权限。';
+                } else if (err.name === 'NotFoundError') {
+                    message.textContent = '未找到可用的摄像头。';
+                } else if (err.name === 'NotReadableError') {
+                    message.textContent = '摄像头可能正在被其他应用使用。';
+                } else {
+                    message.textContent = `无法访问摄像头：${err.message}`;
+                }
+            }
+        });
+
+        // Optional: Stop camera when the page is closed or navigated away
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+   
+</html>
