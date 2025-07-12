@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的浏览器User-Agent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 800px;
+            text-align: left;
+        }
+        h1 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1em;
+            word-wrap: break-word; /* 防止长UA字符串溢出 */
+        }
+        strong {
+            color: #555;
+        }
+        #userAgentDisplay {
+            background-color: #e9e9e9;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: "Courier New", Courier, monospace;
+            white-space: pre-wrap; /* 保留空白符和换行符，并自动换行 */
+            word-break: break-all; /* 强制单词内换行 */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>您的浏览器User-Agent信息</h1>
+        <p>这是您的浏览器发送给服务器的User-Agent字符串：</p>
+        <div id="userAgentDisplay">
+            加载中...
+        </div>
+    </div>
+
+    <script>
+        // 获取浏览器User-Agent字符串并显示
+        document.addEventListener('DOMContentLoaded', function() {
+            const userAgent = navigator.userAgent;
+            document.getElementById('userAgentDisplay').textContent = userAgent;
+        });
+    </script>
+</body>
+</html>
